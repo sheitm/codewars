@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestPart(t *testing.T) {
 	type args struct {
@@ -24,5 +26,48 @@ func TestPart(t *testing.T) {
 				t.Errorf("Part() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func Test_partition_set(t *testing.T) {
+	// Arrange
+	d := []int{3, 4, 1, 1, 2, 0, 0, 0, 0, 0, 0}
+	p := partition{}
+	p.set(d)
+
+	// Assert
+	if len(p.diagram) != 11 {
+		t.Errorf("unexpected diagram length. expected 11. got %d", len(p.diagram))
+	}
+	if p.sum != 11 {
+		t.Errorf("expected sum to be 11. got %d", p.sum)
+	}
+	if p.key != "00000011234" {
+		t.Errorf("unexpected key. got %s", p.key)
+	}
+}
+
+func Test_makePartitions(t *testing.T) {
+	partitions := makePartitions(2)
+	_ = partitions
+}
+
+func Test_partition_make(t *testing.T) {
+	// Arrange
+	n := 4
+	p := partition{}
+
+	// Act
+	p.make(n)
+
+	// Assert
+	if len(p.diagram) != 4 {
+		t.Errorf("unexpected diagram length. expected 4. got %d", len(p.diagram))
+	}
+	if p.sum != 4 {
+		t.Errorf("expected sum to be 4. got %d", p.sum)
+	}
+	if p.key != "1111" {
+		t.Errorf("unexpected key. got %s", p.key)
 	}
 }
