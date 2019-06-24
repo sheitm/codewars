@@ -12,8 +12,8 @@ var valueMap = map[string]int{
 	"M": 1000,
 }
 
-// Decode solve it!
-func Decode(roman string) int {
+// RomanNumeralsDecode solve it!
+func RomanNumeralsDecode(roman string) int {
 	v := 0
 	for i := 0; i < len(roman); i++ {
 		cv := valueMap[string(roman[i])]
