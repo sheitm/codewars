@@ -2,7 +2,7 @@ package main
 
 // https://www.codewars.com/kata/pick-peaks/train/go
 
-// PosPeaks contains peak nfo
+// PosPeaks contains peak info
 type PosPeaks struct {
 	Pos   []int
 	Peaks []int
@@ -11,61 +11,45 @@ type PosPeaks struct {
 // PickPeaks finds all peaks
 func PickPeaks(array []int) PosPeaks {
 	if len(array) == 0 {
-		return PosPeaks{}
+		return PosPeaks{
+			Pos:   []int{},
+			Peaks: []int{},
+		}
 	}
-
+	slopes := toSlopeArray(array)
 	pos := []int{}
 	peaks := []int{}
-	index := 0
-	for {
-		po, pe, nextIndex := searchPeak(index, array)
-		if po > 0 {
-			pos = append(pos, po)
-			peaks = append(peaks, pe)
+	for i := 0; i < len(array)-1; i++ {
+		if slopes[i] != ">" {
+			continue
 		}
-		if nextIndex < 0 {
-			break
+		if slopes[i+1] == "<" {
+			pos = append(pos, i)
+			peaks = append(peaks, array[i])
+			continue
 		}
-		index = nextIndex
+		if slopes[i+1] == "=" && isPlateu(i, slopes) {
+			pos = append(pos, i)
+			peaks = append(peaks, array[i])
+		}
 	}
-
 	return PosPeaks{
 		Pos:   pos,
 		Peaks: peaks,
 	}
 }
 
-func searchPeak(start int, array []int) (int, int, int) {
-	index := start
-	pos := 0
-	peak := 0
-	for {
-		if index == len(array)-1 {
-			return 0, 0, -1
+func isPlateu(index int, slopes []string) bool {
+	for i := index; i < len(slopes)-1; i++ {
+		if slopes[i+1] == "<" {
+			return true
 		}
-		if array[index+1] <= array[index] {
-			ffd := fastForwardDownSlope(index+1, array)
-			if ffd < 0 {
-				return 0, 0, -1
-			}
-			return pos, peak, ffd
-		}
-		pos = index + 1
-		peak = array[pos]
-		index++
-	}
-}
 
-func fastForwardDownSlope(index int, array []int) int {
-	for {
-		if index == len(array)-1 {
-			return -1
+		if slopes[i+1] == ">" {
+			return false
 		}
-		if array[index+1] > array[index] {
-			return index
-		}
-		index++
 	}
+	return false
 }
 
 func toSlopeArray(array []int) []string {
