@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 const alphabet = "abcdefghijklmnopqrstuvwxz"
 
 // big: 65 - 90
@@ -7,12 +9,51 @@ const alphabet = "abcdefghijklmnopqrstuvwxz"
 
 // MovingShift encrypt
 func MovingShift(s string, shift int) []string {
-	return []string{}
+	accum := ""
+	for _, l := range s {
+		ll := encrypt(int(l), shift)
+		accum = fmt.Sprintf("%s%s", accum, string(ll))
+		shift++
+		if shift > 25 {
+			shift = 0
+		}
+	}
+	return toStringArr(accum)
 }
 
 // DemovingShift decrypt
 func DemovingShift(arr []string, shift int) string {
+	s := ""
+	for _, a := range arr
 	return ""
+}
+
+func encrypt(letter, shift int) int {
+	if !isLetter(letter) {
+		return letter
+	}
+	r := letter + shift
+	if isLowercase(letter) {
+		if r <= 122 {
+			return r
+		}
+		return 97 + ((r - 122) - 1)
+	}
+	if r <= 90 {
+		return r
+	}
+	return 65 + ((r - 90) - 1)
+}
+
+func isLowercase(l int) bool {
+	return l >= 97 && l <= 122
+}
+
+func isLetter(l int) bool {
+	if l >= 65 && l <= 90 {
+		return true
+	}
+	return l >= 97 && l <= 122
 }
 
 func toStringArr(s string) []string {
