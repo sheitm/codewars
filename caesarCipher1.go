@@ -2,30 +2,51 @@ package main
 
 import "fmt"
 
-const alphabet = "abcdefghijklmnopqrstuvwxz"
-
-// big: 65 - 90
-// small: 97 - 122
+type shiftOperation func(int, int) int
 
 // MovingShift encrypt
 func MovingShift(s string, shift int) []string {
+	r := execShift(s, shift, encrypt)
+	return toStringArr(r)
+}
+
+// DemovingShift decrypt
+func DemovingShift(arr []string, shift int) string {
+	s := ""
+	for _, a := range arr {
+		s = fmt.Sprintf("%s%s", s, a)
+	}
+	return execShift(s, shift, decrypt)
+}
+
+func execShift(s string, shift int, op shiftOperation) string {
 	accum := ""
 	for _, l := range s {
-		ll := encrypt(int(l), shift)
+		ll := op(int(l), shift)
 		accum = fmt.Sprintf("%s%s", accum, string(ll))
 		shift++
 		if shift > 25 {
 			shift = 0
 		}
 	}
-	return toStringArr(accum)
+	return accum
 }
 
-// DemovingShift decrypt
-func DemovingShift(arr []string, shift int) string {
-	s := ""
-	for _, a := range arr
-	return ""
+func decrypt(letter, shift int) int {
+	if !isLetter(letter) {
+		return letter
+	}
+	r := letter - shift
+	if isLowercase(letter) {
+		if r >= 97 {
+			return r
+		}
+		return 122 - ((97 - r) - 1)
+	}
+	if r >= 65 {
+		return r
+	}
+	return 90 - ((65 - r) - 1) //65 + ((r - 90) - 1)
 }
 
 func encrypt(letter, shift int) int {
@@ -92,27 +113,4 @@ func getStringArrLengths(l int) []int {
 		s += d
 	}
 	return arr
-}
-
-func toStringArrCore(s string, substringCount int) []string {
-	d := len(s) / substringCount
-	res := []string{}
-	for i := 0; i < substringCount; i++ {
-		ii := i * d
-		res = append(res, s[ii:ii+d])
-	}
-	return res
-}
-
-func getPerfectMod(s string, substringCount int) (int, int) {
-	l := len(s)
-	sc := substringCount
-	for i := 0; i < len(s); i++ {
-		if l%sc == 0 {
-			return l, sc
-		}
-		l--
-		sc--
-	}
-	return 0, 0
 }

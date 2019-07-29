@@ -18,12 +18,34 @@ func TestMovingShift(t *testing.T) {
 		{name: "0", args: args{s: "abcde", shift: 1}, want: []string{"b", "d", "f", "h", "j"}},
 		{name: "1", args: args{s: "Z", shift: 1}, want: []string{"A", "", "", "", ""}},
 		{name: "3", args: args{s: "I should have known that you would have a perfect answer for me!!!", shift: 1}, want: []string{"J vltasl rlhr ", "zdfog odxr ypw", " atasl rlhr p ", "gwkzzyq zntyhv", " lvz wp!!!"}},
-		{name: "1", args: args{s: "Z", shift: 26}, want: []string{"A", "", "", "", ""}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := MovingShift(tt.args.s, tt.args.shift); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("MovingShift() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDemovingShift(t *testing.T) {
+	type args struct {
+		arr   []string
+		shift int
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{name: "0", args: args{arr: []string{"b", "d", "f", "h", "j"}, shift: 1}, want: "abcde"},
+		{name: "1", args: args{arr: []string{"A", "", "", "", ""}, shift: 1}, want: "Z"},
+		{name: "2", args: args{arr: []string{"J vltasl rlhr ", "zdfog odxr ypw", " atasl rlhr p ", "gwkzzyq zntyhv", " lvz wp!!!"}, shift: 1}, want: "I should have known that you would have a perfect answer for me!!!"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := DemovingShift(tt.args.arr, tt.args.shift); got != tt.want {
+				t.Errorf("DemovingShift() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -99,6 +121,31 @@ func Test_isLetter(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := isLetter(tt.args.l); got != tt.want {
 				t.Errorf("isLetter() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_decrypt(t *testing.T) {
+	type args struct {
+		letter int
+		shift  int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{name: "0", args: args{letter: 66, shift: 1}, want: 65},
+		{name: "1", args: args{letter: 63, shift: 1}, want: 63},
+		{name: "1", args: args{letter: 65, shift: 1}, want: 90},
+		{name: "2", args: args{letter: 122, shift: 5}, want: 117},
+		{name: "3", args: args{letter: 97, shift: 2}, want: 121},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := decrypt(tt.args.letter, tt.args.shift); got != tt.want {
+				t.Errorf("decrypt() = %v, want %v", got, tt.want)
 			}
 		})
 	}
