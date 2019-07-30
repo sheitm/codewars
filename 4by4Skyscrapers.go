@@ -4,37 +4,45 @@ package main
 
 // SolvePuzzle solves the puzzlr
 func SolvePuzzle(clues []int) [][]int {
-	// b := board{}
-	// b.initialize(4)
-	// return b.getArray()
-	return [][]int{}
+	b := board{}
+	b.initialize(4)
+	return b.cells
 }
 
-// type cell struct {
-// 	x, y, val int
-// 	over, under, left, right *cell
-// }
+type board struct {
+	cells [][]int
+}
 
-// type board struct {
-// 	dims int
-// 	cells [][]cell
-// }
+func (b *board) initialize(dim int) {
+	cls := make([][]int, dim)
+	for y := 0; y < dim; y++ {
+		cls[y] = make([]int, dim)
+	}
+	b.cells = cls
+}
 
-// func (b *board) initialize(dim int) {
-// 	// b.dims = dim
-// 	// cls := []cell{}
-// 	// for x := 0; x < dim; x++ {
-// 	// 	for y := 0; y < dim; y++ {
-// 	// 		c := cell{x: x, y: y, val: 0}
-// 	// 		cls = append(cls, c)
-// 	// 	}
-// 	// }
-// 	// b.cells = cls
-// }
+func getVectorForIndex(cells [][]int, index int) []int {
+	if index <= 3 {
+		v := []int{}
+		for i := 0; i < 4; i++ {
+			v = append(v, cells[i][index])
+		}
+		return v
+	}
+	if index <= 7 {
+		v := []int{}
+		for i := 0; i < 4; i++ {
+			v = append(v, cells[index-4][3-i])
+		}
+		return v
+	}
+	if index <= 11 {
+		v := []int{}
+		for i := 0; i < 4; i++ {
+			v = append(v, cells[3-i][11-index])
+		}
+		return v
+	}
 
-// func (b board) getArray() [][]int {
-// 	res := [][]int{}
-// 	for i := 0; i < b.dims; i++ {
-// 		a :=
-// 	}
-// }
+	return cells[15-index]
+}
