@@ -35,23 +35,47 @@ func TestSolvePuzzle(t *testing.T) {
 	}
 }
 
-func Test_board_initialize(t *testing.T) {
-	b := board{}
-	b.initialize(4)
-	c := b.cells[2][2]
-	if c != 0 {
-		t.Errorf("Expected 0, got %d", c)
-	}
-}
+// func Test_board_initialize(t *testing.T) {
+// 	b := board{}
+// 	b.initialize(4)
+// 	c := b.cells[2][2]
+// 	if c.val != 0 {
+// 		t.Errorf("Expected 0, got %d", c)
+// 	}
+// }
 
-func Test_getVectorForIndex(t *testing.T) {
-	cells := [][]int{
+func Test_matrixToCellsAndBackAgain(t *testing.T) {
+	sourceMatrix := [][]int{
 		{2, 1, 4, 3},
 		{3, 4, 1, 2},
 		{4, 2, 3, 1},
 		{1, 3, 2, 4}}
+	cells := matrixToCells(sourceMatrix)
+	matrix := cellsToMatrix(cells)
+
+	if !reflect.DeepEqual(matrix, sourceMatrix) {
+		t.Errorf("matrix conversion failed. got %v. want %v", matrix, sourceMatrix)
+	}
+}
+
+func Test_vectorConversionAndBackAgain(t *testing.T) {
+	source := []int{2, 1, 4, 3}
+	mv := convertIntVector(source)
+	v := convertCellVector(mv)
+	if !reflect.DeepEqual(source, v) {
+		t.Errorf("vector conversion faile. got %v. expected %v", v, source)
+	}
+}
+
+func Test_getVectorForIndex(t *testing.T) {
+	matrix := [][]int{
+		{2, 1, 4, 3},
+		{3, 4, 1, 2},
+		{4, 2, 3, 1},
+		{1, 3, 2, 4}}
+	cells := matrixToCells(matrix)
 	type args struct {
-		cells [][]int
+		cells [][]*tCell
 		index int
 	}
 	tests := []struct {
@@ -81,7 +105,9 @@ func Test_getVectorForIndex(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getVectorForIndex(tt.args.cells, tt.args.index); !reflect.DeepEqual(got, tt.want) {
+			gCells := getVectorForIndex(tt.args.cells, tt.args.index)
+			got := convertCellVector(gCells)
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("getVectorForIndex() = %v, want %v", got, tt.want)
 			}
 		})
