@@ -10,26 +10,25 @@ func Encode(s string, n int) string {
 		return ""
 	}
 
-	rails := map[int]string{
-		0: "",
-		1: "",
-		2: "",
+	rails := map[int]string{}
+	for i := 0; i < n; i++ {
+		rails[i] = ""
 	}
 
-	mapIndex := 0
+	railIndex := 0
 	down := true
 	for i := 0; i < len(s); i++ {
-		rails[mapIndex] = fmt.Sprintf("%s%s", rails[mapIndex], string(s[i]))
+		rails[railIndex] = fmt.Sprintf("%s%s", rails[railIndex], string(s[i]))
 		if down {
-			mapIndex++
-			if mapIndex == n {
-				mapIndex = n - 2
+			railIndex++
+			if railIndex == n {
+				railIndex = n - 2
 				down = false
 			}
 		} else {
-			mapIndex--
-			if mapIndex < 0 {
-				mapIndex = 1
+			railIndex--
+			if railIndex < 0 {
+				railIndex = 1
 				down = true
 			}
 		}
