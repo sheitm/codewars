@@ -7,8 +7,8 @@ import (
 
 const base91CharTable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~\""
 
-// Encode encodes
-func Encode(d []byte) []byte {
+// Base91Encode encodes
+func Base91Encode(d []byte) []byte {
 	encoded := ""
 	bits := reverseString(stringToBin(string(d)))
 	index := 0
@@ -44,8 +44,8 @@ func reverseString(s string) string {
 	return string(runes)
 }
 
-// Decode decodes
-func Decode(d []byte) []byte {
+// Base91Decode decodes
+func Base91Decode(d []byte) []byte {
 	return nil
 }
 
@@ -63,10 +63,10 @@ func bitStringToInt(s string) int64 {
 
 // EncodeToString decodes a given byte array are returns a string
 func EncodeToString(d []byte) string {
-	return string(Encode(d))
+	return string(Base91Encode(d))
 }
 
 // DecodeToString decodes a given byte array are returns a string
 func DecodeToString(d []byte) string {
-	return string(Decode(d))
+	return string(Base91Decode(d))
 }
