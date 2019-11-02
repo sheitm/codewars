@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestDecode(t *testing.T) {
+func TestDecodex(t *testing.T) {
 	type args struct {
 		roman string
 	}
