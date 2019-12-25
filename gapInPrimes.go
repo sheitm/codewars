@@ -12,9 +12,24 @@ func Gap(g, m, n int) []int {
 		if m + g > n {
 			return nil
 		}
-		if big.NewInt(int64(m)).ProbablyPrime(0) && big.NewInt(int64(m+g)).ProbablyPrime(0) {
-			return []int{m, m+g}
-		}
+		lower := m
+		upper := m+g
+		p := big.NewInt(int64(lower)).ProbablyPrime(0)
+		gp := big.NewInt(int64(upper)).ProbablyPrime(0)
 		m = m+2
+		if  !(p&&gp)  {
+			continue
+		}
+		c := m
+		for {
+			if c >= upper {
+				return []int{lower, upper}
+			}
+			if big.NewInt(int64(c)).ProbablyPrime(0) {
+				break
+			}
+			c = c+2
+		}
 	}
 }
+
